@@ -1,0 +1,20 @@
+{
+  "name": "top-ten",
+  "version": "0.1.0",
+  "description": "get the top ten apprentices",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "jest"
+  },
+  "author": "bmordan",
+  "license": "MIT",
+  "dependencies": {
+    "csv-parse": "^4.8.6",
+    "dotenv": "^8.2.0",
+    "nodemailer": "^6.4.3",
+    "pug": "^2.0.4",
+    "puppeteer": "^2.1.1",
+    "sqlite3": "^4.1.1"
+  }
+}
