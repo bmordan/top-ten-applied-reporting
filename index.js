@@ -1,11 +1,12 @@
 require('dotenv').config()
 const {EMAIL, GMAIL_PASSWORD, APPLIED_PASSWORD} = process.env
-const puppeteer = require("puppeteer")
+const puppeteer = require("puppeteer-core")
 const nodemailer = require('nodemailer')
 const fs = require('fs')
 const path = require("path")
 const parse = require("csv-parse")
 const pug = require("pug")
+const CronJob = require('cron').CronJob
 const sqlite3 = require('sqlite3').verbose()
 const {exec} = require("child_process")
 const db = new sqlite3.Database(':memory:')
@@ -17,10 +18,16 @@ const transporter = nodemailer.createTransport({
             pass: GMAIL_PASSWORD
         }
 })
+const schedule = '22 * * * 6'
 // GMAIL_PASSWORD is an app password https://support.google.com/accounts/answer/185833
 
 async function go() {
-    const browser = await puppeteer.launch({headless: true})
+    console.log(`starting cron job at ${new Date().toISOString()}`)
+    const browser = await puppeteer.launch({
+        headless: true,
+        executablePath: '/usr/bin/chromium-browser',
+        args: ['--no-sandbox']
+    })
     const page = await browser.newPage()
     await page.setCacheEnabled(false)
     await page.goto("https://applied.whitehat.org.uk/login/index.php")
@@ -101,4 +108,6 @@ const sendReport = rows => {
     })
 }
 
-go()
+console.log(`setting top-ten-appied-reporting to cron at ${schedule}`)
+new CronJob(schedule, go, null, true)
+// '0 9 * * 1-5' “At 09:00 on every day-of-week from Monday through Friday.” https://crontab.guru/#0_9_*_*_1-5
