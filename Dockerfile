@@ -1,4 +1,5 @@
-FROM arm32v6/node:10-alpine
+FROM arm32v6/node:alpine
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD="true"
 WORKDIR /app
 RUN apk update
 RUN apk add chromium
