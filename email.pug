@@ -7,5 +7,5 @@ table(style="border-collapse:collapse;border:solid 1px gray;")
     each objective in data
         tr(style="border-collapse:collapse;border:solid 1px gray;")
             td(style="border-collapse:collapse;border:solid 1px gray;padding:1rem;")=objective.name
-            td(style="border-collapse:collapse;border:solid 1px gray;padding:1rem;")=objective.title
+            td(style="border-collapse:collapse;border:solid 1px gray;padding:1rem;") #{objective.title} #{objective.status === "Complete" ? "✅" : ""}
             td(style="border-collapse:collapse;border:solid 1px gray;padding:1rem;text-align:center;")=objective.days_to_due

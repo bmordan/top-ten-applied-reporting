@@ -53,7 +53,7 @@ async function readcsv () {
         const src = path.resolve(reportsDir, 'objectives_for_coach_dashboard_report.csv')
         const stream = parse({delimiter: ','})
         const insert = db.prepare("INSERT INTO objectives (name, title, date_set, date_due, status, coach, discription, days_from_set, days_to_due) VALUES (?,?,?,?,?,?,?,?,?);")
-        const query = `SELECT name, title, days_to_due FROM objectives WHERE status=="In Progress" AND days_to_due > -14 ORDER BY days_to_due, name LIMIT 20;`
+        const query = `SELECT name, title, status, days_to_due FROM objectives WHERE status IS "In Progress" AND days_to_due > -14 OR status IS "Complete" AND days_to_due > 0  ORDER BY days_to_due, name LIMIT 10;`
         stream.on('readable', function () {
             let headers
             while(record = stream.read()) {
