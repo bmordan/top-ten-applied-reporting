@@ -43,6 +43,6 @@ describe("Objective", () => {
     })
 
     it("can get all the relevent objectives", () => {
-        expect(Objective.topten().length).toBe(0)
+        expect(Objective.objectives().length).toBe(0)
     })
 })

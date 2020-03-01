@@ -1,5 +1,5 @@
 require('dotenv').config()
-const {EMAIL, GMAIL_PASSWORD, APPLIED_PASSWORD, NODE_ENV = 'production'} = process.env
+const {EMAIL, GMAIL_PASSWORD, APPLIED_PASSWORD, NODE_ENV} = process.env
 const puppeteer = require('puppeteer-core')
 const nodemailer = require('nodemailer')
 const fs = require('fs')
@@ -17,17 +17,18 @@ const transporter = nodemailer.createTransport({
             pass: GMAIL_PASSWORD
         }
 })
-const schedule = '22 * * * 7'
+const schedule = '01 * * * *'
 // '0 9 * * 1-5' “At 09:00 on every day-of-week from Monday through Friday.” https://crontab.guru/#0_9_*_*_1-5
 // GMAIL_PASSWORD is an app password https://support.google.com/accounts/answer/185833
-const executablePath = NODE_ENV === 'development' ? '/Applications/Chromium.app/Contents/MacOS/Chromium' : '/usr/bin/chromium-browser'
 
 async function go() {
     console.log(`starting cron job at ${new Date().toISOString()}`)
     const browser = await puppeteer.launch({
         headless: true,
-        executablePath: executablePath,
-        args: ['--no-sandbox']
+        executablePath: NODE_ENV === 'development' 
+            ? '/Applications/Chromium.app/Contents/MacOS/Chromium' 
+            : '/usr/bin/chromium-browser',
+        args: ['--no-sandbox', '--disable-setuid-sandbox']
     })
     const page = await browser.newPage()
     await page.setCacheEnabled(false)
@@ -47,7 +48,6 @@ async function go() {
 }
 
 async function readcsv () {
-    const src = path.resolve(reportsDir, 'objectives_for_coach_dashboard_report.csv')
     const stream = parse({delimiter: ','})
     stream.on('readable', function () {
         let headers
@@ -56,26 +56,22 @@ async function readcsv () {
             else { new Objective(record) }
         }
     })
-    stream.on('error', function(err){
-        console.error(err.message)
-    })
-    stream.on('end', function () {
-        stream.end()
-        sendReport(Objective.topten())
-    })
-    fs.createReadStream(src).pipe(stream)
+    stream.on('error', function(err) { console.error(err.message) })
+    stream.on('end', sendReport)
+    fs.createReadStream(path.resolve(reportsDir, 'objectives_for_coach_dashboard_report.csv')).pipe(stream)
 }
 
-const sendReport = report => {
+const sendReport = () => {
     const email = {
         from: EMAIL,
         to: EMAIL,
         subject: `Objectives report for ${new Date().toGMTString().substring(0,17)}`,
-        html: pug.renderFile(path.join(__dirname, 'email.pug'), {report})
+        html: pug.renderFile(path.join(__dirname, 'email.pug'), {objectives: Objective.objectives()})
     }
 
     transporter.sendMail(email, (err, info) => {
         console.log(err || info)
+        Objective.all = []
     })
 }
 

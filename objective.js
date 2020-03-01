@@ -29,7 +29,7 @@ function Objective (record) {
 }
 
 Objective.all = []
-Objective.topten = function () {
+Objective.objectives = function () {
     return this.all
     .filter(obj => {
         return obj.days_to_due > -14 && obj.status === "In Progress"
