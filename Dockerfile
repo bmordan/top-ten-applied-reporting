@@ -1,8 +1,8 @@
-FROM arm32v6/node:alpine
+FROM arm32v7/node
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD="true"
 WORKDIR /app
-RUN apk update
-RUN apk add --no-cache chromium@3.10=~73.0.3683.103
+RUN apt-get update
+RUN apt-get install chromium-browser
 COPY email.pug index.js package.json ./
 RUN mkdir reports
 RUN npm install
