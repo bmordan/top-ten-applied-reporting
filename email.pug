@@ -4,7 +4,7 @@ table(style="border-collapse:collapse;border:solid 1px gray;")
         th Name
         th Objective
         th Due days
-    each objective in data
+    each objective in report
         tr(style="border-collapse:collapse;border:solid 1px gray;")
             td(style="border-collapse:collapse;border:solid 1px gray;padding:1rem;")=objective.name
             td(style="border-collapse:collapse;border:solid 1px gray;padding:1rem;") #{objective.title} #{objective.status === "Complete" ? "✅" : ""}

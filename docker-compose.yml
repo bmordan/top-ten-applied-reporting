@@ -3,3 +3,7 @@ version: "3"
 services:
     cron:
         image: bmordan/top-ten-applied-reporting
+        environment:
+            - EMAIL=bernard.mordan@whitehat.org.uk
+            - APPLIED_PASSWORD=appliedAu7umn
+            - GMAIL_PASSWORD=aqgyyepomiubphmq

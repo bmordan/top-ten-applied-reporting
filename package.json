@@ -4,7 +4,9 @@
   "description": "get the top ten apprentices",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "dev": "NODE_ENV=development node index.js",
+    "test": "jest --watchAll"
   },
   "author": "bmordan",
   "license": "MIT",
@@ -14,7 +16,9 @@
     "dotenv": "^8.2.0",
     "nodemailer": "^6.4.3",
     "pug": "^2.0.4",
-    "puppeteer-core": "^2.1.1",
-    "sqlite3-arm": "^4.0.2"
+    "puppeteer-core": "^2.1.1"
+  },
+  "devDependencies": {
+    "jest": "^25.1.0"
   }
 }
