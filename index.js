@@ -1,5 +1,6 @@
 require('dotenv').config()
 const {EMAIL, GMAIL_PASSWORD, APPLIED_PASSWORD, NODE_ENV} = process.env
+// GMAIL_PASSWORD is an app password https://support.google.com/accounts/answer/185833
 const puppeteer = require('puppeteer-core')
 const nodemailer = require('nodemailer')
 const fs = require('fs')
@@ -17,9 +18,8 @@ const transporter = nodemailer.createTransport({
             pass: GMAIL_PASSWORD
         }
 })
-const schedule = '01 * * * *'
-// '0 9 * * 1-5' “At 09:00 on every day-of-week from Monday through Friday.” https://crontab.guru/#0_9_*_*_1-5
-// GMAIL_PASSWORD is an app password https://support.google.com/accounts/answer/185833
+const schedule = '10 9 * * 1-5'
+// '10 9 * * 1-5' “At 09:10 on every day-of-week from Monday through Friday.” https://crontab.guru/#10_9_*_*_1-5
 
 async function go() {
     console.log(`starting cron job at ${new Date().toISOString()}`)

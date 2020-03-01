@@ -50,5 +50,5 @@ RUN apt-get clean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 COPY email.pug index.js objective.js package.json ./
 RUN mkdir reports
-RUN npm install
+RUN npm install --production
 CMD ["npm", "start"]
