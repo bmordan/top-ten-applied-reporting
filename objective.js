@@ -36,7 +36,7 @@ Objective.objectives = function () {
             || obj.days_to_due > 0 && obj.status === "Complete"
     })
     .slice(0, 10)
-    .sort((a, b) => a.days_to_due > b.days_to_due ? 1 : -1)
+    .sort((a, b) => a.days_to_due === b.days_to_due ? 0 : (a.days_to_due > b.days_to_due ? 1 : -1))
 }
 
 module.exports = Objective

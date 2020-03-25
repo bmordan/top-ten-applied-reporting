@@ -1,7 +1,7 @@
 require('dotenv').config()
 const {EMAIL, GMAIL_PASSWORD, APPLIED_PASSWORD, NODE_ENV} = process.env
 // GMAIL_PASSWORD is an app password https://support.google.com/accounts/answer/185833
-const puppeteer = require('puppeteer-core')
+const puppeteer = require('puppeteer')
 const nodemailer = require('nodemailer')
 const fs = require('fs')
 const path = require('path')
@@ -18,16 +18,13 @@ const transporter = nodemailer.createTransport({
             pass: GMAIL_PASSWORD
         }
 })
-const schedule = '10 9 * * 1-5'
-// '10 9 * * 1-5' “At 09:10 on every day-of-week from Monday through Friday.” https://crontab.guru/#10_9_*_*_1-5
+const schedule = '39 8 * * 1-5'
+// '39 8 * * 1-5' “At 08:39 on every day-of-week from Monday through Friday.” https://crontab.guru/#39_8_*_*_1-5
 
 async function go() {
     console.log(`starting cron job at ${new Date().toISOString()}`)
     const browser = await puppeteer.launch({
         headless: true,
-        executablePath: NODE_ENV === 'development' 
-            ? '/Applications/Chromium.app/Contents/MacOS/Chromium' 
-            : '/usr/bin/chromium-browser',
         args: ['--no-sandbox', '--disable-setuid-sandbox']
     })
     const page = await browser.newPage()
@@ -54,6 +51,7 @@ async function readcsv () {
         while(record = stream.read()) {
             if(!headers) { headers = record }
             else { new Objective(record) }
+            console.log(record)
         }
     })
     stream.on('error', function(err) { console.error(err.message) })
