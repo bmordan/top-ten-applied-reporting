@@ -25,6 +25,9 @@ async function go() {
     console.log(`starting cron job at ${new Date().toISOString()}`)
     const browser = await puppeteer.launch({
         headless: true,
+        executablePath: NODE_ENV === 'development' 
+        ? '/Applications/Chromium.app/Contents/MacOS/Chromium' 
+        : '/usr/bin/google-chrome-unstable',
         args: ['--no-sandbox', '--disable-setuid-sandbox']
     })
     const page = await browser.newPage()
